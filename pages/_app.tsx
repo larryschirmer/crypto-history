@@ -1,10 +1,15 @@
 import Head from 'next/head';
+import { Provider } from 'react-redux';
 
-import 'styles/globals.css';
+import { useStore } from '@redux/store';
+
+import '@styles/globals.scss';
 
 function MyApp({ Component, pageProps }) {
+  const store = useStore(pageProps.initialReduxState);
+
   return (
-    <>
+    <Provider store={store}>
       <Head>
         <link rel="preconnect" href="https://fonts.gstatic.com" />
         <link
@@ -13,7 +18,7 @@ function MyApp({ Component, pageProps }) {
         />
       </Head>
       <Component {...pageProps} />
-    </>
+    </Provider>
   );
 }
 
