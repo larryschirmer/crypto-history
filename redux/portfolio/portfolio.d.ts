@@ -1,6 +1,6 @@
 export type Token = {
-  name: String;
-  amount: Number;
+  name: string;
+  amount: number;
 };
 
 export type Portfolio = Token[];

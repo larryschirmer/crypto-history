@@ -3,13 +3,13 @@ import { Action } from './actions';
 import { Market } from './market';
 
 type MarketState = {
-  market: Market;
+  data: Market;
   isFetching: Boolean;
   error: Boolean;
 };
 
 const initialState: MarketState = {
-  market: {},
+  data: {},
   isFetching: false,
   error: false,
 };

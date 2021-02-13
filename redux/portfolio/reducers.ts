@@ -3,11 +3,11 @@ import { Action } from './actions';
 import { Portfolio } from './portfolio';
 
 type PortfolioState = {
-  portfolio: Portfolio
+  data: Portfolio
 }
 
 const initialState: PortfolioState = {
-  portfolio: []
+  data: []
 };
 
 const portfolioReducer = (state: PortfolioState = initialState, action: Action) => {
@@ -15,7 +15,7 @@ const portfolioReducer = (state: PortfolioState = initialState, action: Action) 
     case types.SET_PORTFOLIO:
       return {
         ...state,
-        portfolio: action.payload
+        data: action.payload
       };
     default:
       return state;
