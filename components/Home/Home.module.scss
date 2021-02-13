@@ -1,0 +1,17 @@
+.home {
+  padding: 5rem 2rem;
+  display: flex;
+  flex-direction: column;
+  .chart-placeholder {
+    height: 25rem;
+  }
+  .brush-placeholder {
+    height: 10rem;
+  }
+  .chart-placeholder,
+  .brush-placeholder {
+    width: 100%;
+    background-color: #aaa;
+    margin-bottom: 1rem;
+  }
+}

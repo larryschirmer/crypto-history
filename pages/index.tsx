@@ -1,9 +1,9 @@
 import React, { FC } from 'react';
 
-import PlaceHolder from '@components/Placeholder';
+import Home from '@components/Home';
 
-const Home: FC<{}> = () => {
-  return <PlaceHolder />;
+const Root: FC<{}> = () => {
+  return <Home />;
 };
 
-export default Home;
+export default Root;
