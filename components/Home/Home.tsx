@@ -1,5 +1,7 @@
 import React from 'react';
 
+import Nav from '@components/Nav';
+
 import styles from './Home.module.scss';
 
 const {
@@ -11,6 +13,7 @@ const {
 const Home = () => {
   return (
     <div className={homeClass}>
+      <Nav />
       <div className={chartPlaceholderClass}></div>
       <div className={brushPlaceholderClass}></div>
     </div>
