@@ -16,31 +16,37 @@ const useInitializeStore = (): void => {
   const dispatch = useDispatch();
   const { portfolio, market, history } = useSelector(
     ({ portfolio, market, history }: RootState) => ({
-      portfolio: portfolio.data,
-      market: market.data,
+      portfolio,
+      market,
       history: history.data,
     }),
   );
 
+  const { data: portfolioData, initialized: portfolioDidInitialized } = portfolio;
+  const { data: marketData, initialized: marketDidInitialized } = market;
+
   // fetch portfolio if unset
   useEffect(() => {
-    if (isEmpty(portfolio)) dispatch(fetchPortfolio());
-  }, [dispatch, portfolio]);
+    const shouldFetchData = isEmpty(portfolioData) && !portfolioDidInitialized;
+    if (shouldFetchData) dispatch(fetchPortfolio());
+  }, [dispatch, portfolioData, portfolioDidInitialized]);
 
   // fetch market if is empty and portfolio is set
   useEffect(() => {
-    if (isEmpty(market) && !isEmpty(portfolio)) {
-      const tokenIds = portfolio.map(({ name }) => name);
+    const shouldFetchData = isEmpty(marketData) && !marketDidInitialized && !isEmpty(portfolioData);
+    if (shouldFetchData) {
+      const tokenIds = portfolioData.map(({ name }) => name);
       dispatch(fetchMarket(tokenIds));
     }
-  }, [dispatch, market, portfolio]);
+  }, [dispatch, marketData, marketDidInitialized, portfolioData]);
 
   // generate history if empty and others are set
   useEffect(() => {
-    if (isEmpty(history) && !isEmpty(market) && !isEmpty(portfolio)) {
-      dispatch(generatePortfolio({ portfolio, market }));
+    const shouldUpdate = isEmpty(history) && !isEmpty(marketData) && !isEmpty(portfolioData);
+    if (shouldUpdate) {
+      dispatch(generatePortfolio({ portfolio: portfolioData, market: marketData }));
     }
-  }, [dispatch, history, market, portfolio]);
+  }, [dispatch, history, marketData, portfolioData]);
 };
 
 export default useInitializeStore;
