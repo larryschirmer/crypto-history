@@ -1,6 +1,6 @@
 import * as types from './constants';
 import { Action } from './actions';
-import { History } from './portfolioHistory';
+import { History } from './types';
 
 type HistoryState = {
   data: History;

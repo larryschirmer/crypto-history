@@ -1,5 +1,5 @@
 import * as types from './constants';
-import { Market } from './market';
+import { Market } from './types';
 
 export type Action =
   | {

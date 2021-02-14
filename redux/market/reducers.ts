@@ -1,6 +1,6 @@
 import * as types from './constants';
 import { Action } from './actions';
-import { Market } from './market';
+import { Market } from './types';
 
 type MarketState = {
   data: Market;

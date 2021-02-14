@@ -1,6 +1,6 @@
-import { Portfolio } from '@redux/portfolio/portfolio';
-import { Market } from '@redux/market/market';
-import { History, Snapshot } from './portfolioHistory';
+import { Portfolio } from '@redux/portfolio/types';
+import { Market } from '@redux/market/types';
+import { History, Snapshot } from './types';
 
 import { generatePortfolioAction, Dispatch } from './actions';
 

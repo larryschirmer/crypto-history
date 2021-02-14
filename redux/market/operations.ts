@@ -1,4 +1,4 @@
-import { Market, RawMarket } from './market';
+import { Market, RawMarket } from './types';
 
 import {
   fetchMarketFailure,
@@ -9,7 +9,7 @@ import {
 
 const apiBaseUrl = 'https://api.coingecko.com/api/v3';
 
-export const fetchMarket = (ids: String[]) => async (dispatch: Dispatch) => {
+export const fetchMarket = (ids: string[]) => async (dispatch: Dispatch): Promise<void> => {
   dispatch(fetchMarketRequest());
 
   const idsString = ids.join(',').toString();

@@ -1,6 +1,6 @@
 import * as types from './constants';
 import { Action } from './actions';
-import { Portfolio } from './portfolio';
+import { Portfolio } from './types';
 
 type PortfolioState = {
   data: Portfolio

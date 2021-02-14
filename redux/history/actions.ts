@@ -1,5 +1,5 @@
 import * as types from './constants';
-import { History } from './portfolioHistory';
+import { History } from './types';
 
 export type Action =
   | {
