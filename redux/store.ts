@@ -1,16 +1,16 @@
 import { useMemo } from 'react';
-import {createStore, applyMiddleware} from 'redux';
+import { createStore, applyMiddleware, Store } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import thunkMiddleware from 'redux-thunk';
-import reducers from '.';
+import reducers, { RootState } from '.';
 
-let store;
+let store: Store;
 
-function initStore(initialState) {
+function initStore(initialState: RootState): Store {
   return createStore(reducers, initialState, composeWithDevTools(applyMiddleware(thunkMiddleware)));
 }
 
-export const initializeStore = (preloadedState) => {
+export const initializeStore = (preloadedState: RootState): Store => {
   let _store = store ?? initStore(preloadedState);
 
   // After navigating to a page with an initial Redux state, merge that state
@@ -32,7 +32,7 @@ export const initializeStore = (preloadedState) => {
   return _store;
 };
 
-export function useStore(initialState) {
+export function useStore(initialState: RootState): Store {
   const store = useMemo(() => initializeStore(initialState), [initialState]);
   return store;
 }

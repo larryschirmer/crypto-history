@@ -7,8 +7,7 @@ export const updatePortfolio = (portfolio: Portfolio) => (dispatch: Dispatch): v
   window.localStorage.setItem('portfolio', JSON.stringify(portfolio));
 };
 
-export const fetchPortfolio = () => (dispatch: Dispatch): Promise<Portfolio> => {
-  const portfolio: Portfolio = JSON.parse(window.localStorage.getItem('portfolio') ?? "[]");
+export const fetchPortfolio = () => (dispatch: Dispatch): void => {
+  const portfolio: Portfolio = JSON.parse(window.localStorage.getItem('portfolio') ?? '[]');
   dispatch(setPortfolio(portfolio));
-  return new Promise<Portfolio>(res => res(portfolio))
 };

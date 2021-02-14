@@ -4,17 +4,19 @@ import { Market } from './types';
 
 type MarketState = {
   data: Market;
-  isFetching: Boolean;
-  error: Boolean;
+  isFetching: boolean;
+  error: boolean;
+  initialized: boolean;
 };
 
 const initialState: MarketState = {
   data: {},
   isFetching: false,
   error: false,
+  initialized: false,
 };
 
-const marketReducer = (state: MarketState = initialState, action: Action) => {
+const marketReducer = (state: MarketState = initialState, action: Action): MarketState => {
   switch (action.type) {
     case types.FETCH_PRICES_REQUEST:
       return {
@@ -25,11 +27,13 @@ const marketReducer = (state: MarketState = initialState, action: Action) => {
       return {
         ...initialState,
         data: action.payload,
+        initialized: true,
       };
     case types.FETCH_PRICES_FAILURE:
       return {
         ...initialState,
         error: true,
+        initialized: true,
       };
     default:
       return state;

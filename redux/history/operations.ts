@@ -23,7 +23,7 @@ const makeSnapshot = ({ portfolio, market }: Props): Snapshot => {
   };
 };
 
-export const generatePortfolio = ({ portfolio, market }: Props) => (dispatch: Dispatch) => {
+export const generatePortfolio = ({ portfolio, market }: Props) => (dispatch: Dispatch): void => {
   const prevHistory: History = JSON.parse(window.localStorage.getItem('history') ?? '[]');
 
   const midnight = new Date().setUTCHours(0, 0, 0, 0);

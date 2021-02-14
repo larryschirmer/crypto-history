@@ -10,7 +10,7 @@ const initialState: HistoryState = {
   data: [],
 };
 
-const historyReducer = (state: HistoryState = initialState, action: Action) => {
+const historyReducer = (state: HistoryState = initialState, action: Action): HistoryState => {
   switch (action.type) {
     case types.GENERATE_PORTFOLIO:
       return {

@@ -1,5 +1,5 @@
 import * as types from './constants';
-import { Portfolio } from './portfolio';
+import { Portfolio } from './types';
 
 export type Action = {
       type: typeof types.SET_PORTFOLIO;
