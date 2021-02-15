@@ -1,5 +1,39 @@
+@import '@styles/vars.module';
+
 .totals {
   display: flex;
+  flex-direction: column;
+  .subtitle {
+    font-size: 1.5rem;
+  }
+  .token-list {
+    display: flex;
+    flex-direction: column;
+    .token {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      .token-details {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        h1,
+        p {
+          font-size: 1.3rem;
+          margin: 0;
+          padding: 0;
+        }
+        h1 {
+          font-weight: bold;
+          margin-right: 2rem;
+        }
+      }
+      button {
+        @include button;
+        height: 3rem;
+      }
+    }
+  }
 }
 
 .loading {
