@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 
 import Nav from '@components/Nav';
-import Home from '@components/Home';
+import TokenForm from '@components/TokenForm';
 import { useInitializeStore } from '@components/customHooks';
 
 const Page: FC = () => {
@@ -11,7 +11,7 @@ const Page: FC = () => {
   return (
     <>
       <Nav />
-      <Home />
+      <TokenForm />
     </>
   );
 };

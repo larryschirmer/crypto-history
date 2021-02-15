@@ -7,7 +7,7 @@ import { useStore } from '@redux/store';
 
 import '@styles/globals.scss';
 
-const MyApp: FC<AppProps> = ({ Component, pageProps }: AppProps) => {
+const Root: FC<AppProps> = ({ Component, pageProps }: AppProps) => {
   const store = useStore(pageProps.initialReduxState);
 
   return (
@@ -24,4 +24,4 @@ const MyApp: FC<AppProps> = ({ Component, pageProps }: AppProps) => {
   );
 };
 
-export default MyApp;
+export default Root;

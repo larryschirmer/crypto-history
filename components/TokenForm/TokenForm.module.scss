@@ -1,0 +1,44 @@
+@import '@styles/vars.module';
+
+.token-form {
+  padding: 7rem 2rem;
+  
+  .input-section {
+    margin-bottom: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    label {
+      font-size: 1.7rem;
+      color: #333;
+    }
+    input {
+      height: 3rem;
+      border: 1px solid #333;
+      border-radius: 0.2rem;
+      padding: 0 1rem;
+      font-size: 2rem;
+      &::placeholder {
+        color: #aaa;
+      }
+    }
+    .error {
+      font-size: 1.2rem;
+      color: #e25e;
+    }
+  }
+  .form-actions {
+    display: flex;
+    justify-content: space-around;
+    button {
+      @include button;
+      border: none;
+      border-radius: 0.6rem;
+      &.cancel-btn {
+        background-color: #ddd;
+      }
+      &.submit-btn {
+        background-color: #2e5a;
+      }
+    }
+  }
+}
