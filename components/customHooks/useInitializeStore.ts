@@ -2,11 +2,10 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import isEmpty from 'lodash/isEmpty';
 
-import { RootState } from '@redux/index';
-
 import { operations as portfolioOperations } from '@redux/portfolio';
 import { operations as marketOperations } from '@redux/market';
 import { operations as historyOperations } from '@redux/history';
+import { RootState } from '@redux/index';
 
 const { fetchPortfolio } = portfolioOperations;
 const { fetchMarket } = marketOperations;

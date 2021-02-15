@@ -1,5 +1,4 @@
 import { Token, Portfolio } from './types';
-
 import { initializePortfolio, setToken, deleteToken, Dispatch } from './actions';
 
 export const updatePortfolio = (token: Token) => (dispatch: Dispatch): void => {
