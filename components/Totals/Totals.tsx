@@ -25,7 +25,7 @@ const Totals: FC = () => {
   }));
 
   const todaysSnapshot: Snapshot | undefined = history.length ? history.slice(-1)[0] : undefined;
-  const total = todaysSnapshot.portfolio.reduce(
+  const total = todaysSnapshot?.portfolio.reduce(
     (sum, token) => sum + +token.amount * +token.value,
     0,
   );

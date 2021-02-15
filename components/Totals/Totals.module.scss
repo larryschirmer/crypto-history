@@ -3,8 +3,11 @@
 .totals {
   display: flex;
   flex-direction: column;
-  .subtitle {
+  .title {
     font-size: 1.5rem;
+  }
+  .subtitle {
+    font-size: 1.6rem;
   }
   .token-list {
     display: flex;
