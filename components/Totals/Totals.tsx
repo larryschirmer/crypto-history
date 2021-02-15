@@ -1,5 +1,6 @@
 import React, { FC } from 'react';
 import { useSelector } from 'react-redux';
+import { useRouter } from 'next/router';
 import format from 'date-fns/format';
 
 import { RootState } from '@redux/index';
@@ -10,6 +11,7 @@ import styles from './Totals.module.scss';
 const {
   loading: loadingClass,
   totals: totalsClass,
+  title: titleClass,
   subtitle: subtitleClass,
   'token-list': tokenListClass,
   token: tokenClass,
@@ -17,16 +19,31 @@ const {
 } = styles;
 
 const Totals: FC = () => {
+  const router = useRouter();
   const { history } = useSelector(({ history }: RootState) => ({
     history: history.data,
   }));
 
   const todaysSnapshot: Snapshot | undefined = history.length ? history.slice(-1)[0] : undefined;
+  const total = todaysSnapshot.portfolio.reduce(
+    (sum, token) => sum + +token.amount * +token.value,
+    0,
+  );
+
+  const handleEditToken = (id: string) => {
+    router.push({
+      pathname: '/settings/[id]',
+      query: { id },
+    });
+  };
 
   return todaysSnapshot ? (
     <div className={totalsClass}>
-      <div className={subtitleClass}>
+      <div className={titleClass}>
         Snapshot for {format(new Date(todaysSnapshot.day), 'eee, MMM do')}
+      </div>
+      <div className={subtitleClass}>
+        {new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(total)}
       </div>
       <div className={tokenListClass}>
         {todaysSnapshot.portfolio.map(({ amount, name, value }) => (
@@ -39,7 +56,7 @@ const Totals: FC = () => {
                 )}
               </p>
             </div>
-            <button>Edit</button>
+            <button onClick={() => handleEditToken(name)}>Edit</button>
           </div>
         ))}
       </div>
