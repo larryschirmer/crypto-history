@@ -1,8 +1,9 @@
 @import '@styles/vars.module';
 
 .token-form {
+  max-width: 60rem;
+  margin: 0 auto;
   padding: 7rem 2rem;
-  
   .input-section {
     margin-bottom: 1.5rem;
     display: flex;

@@ -52,7 +52,6 @@ const TokenForm: FC = () => {
 
   return (
     <div className={tokenFormClass}>
-      {JSON.stringify(validIds.includes('algorand'))}
       <form onSubmit={formik.handleSubmit}>
         <div className={inputSectionClass}>
           <label htmlFor="name">Name</label>
