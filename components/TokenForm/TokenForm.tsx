@@ -29,7 +29,7 @@ const TokenForm: FC = () => {
   }));
   const editId = router.asPath.replace('/settings/', '');
 
-  const handleCancel = () => {
+  const handleOpenSettings = () => {
     router.push('/settings');
   };
 
@@ -45,13 +45,15 @@ const TokenForm: FC = () => {
   });
   const onSubmit = (values: Token) => {
     dispatch(updatePortfolio(values));
+    handleOpenSettings()
   };
 
   const formik = useFormik({ initialValues, validationSchema, onSubmit });
 
   return (
     <div className={tokenFormClass}>
-      <form>
+      {JSON.stringify(validIds.includes('algorand'))}
+      <form onSubmit={formik.handleSubmit}>
         <div className={inputSectionClass}>
           <label htmlFor="name">Name</label>
           <input
@@ -74,11 +76,11 @@ const TokenForm: FC = () => {
           />
         </div>
         <div className={formActionsClass}>
-          <button onClick={handleCancel} className={cancelBtnClass}>
+          <button onClick={handleOpenSettings} className={cancelBtnClass}>
             Cancel
           </button>
           <button type="submit" disabled={!formik.isValid} className={submitBtnClass}>
-            {editId === 'add' ? 'Add' : 'Edit'}
+            {editId === 'new' ? 'Add' : 'Edit'}
           </button>
         </div>
       </form>

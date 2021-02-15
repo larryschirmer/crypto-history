@@ -16,10 +16,10 @@ const portfolioReducer = (state: PortfolioState = initialState, action: Action):
   switch (action.type) {
     case types.SET_PORTFOLIO: {
       const token = action.payload;
-      const isNew = state.data.find(({ name }) => name === token.name);
-      const updatedData = isNew
-        ? [...state.data, token]
-        : state.data.map(({ name, amount }) => (name === token.name ? token : { name, amount }));
+      const isIncluded = state.data.find(({ name }) => name === token.name);
+      const updatedData = isIncluded
+        ? state.data.map(({ name, amount }) => (name === token.name ? token : { name, amount }))
+        : [...state.data, token];
 
       return {
         ...state,

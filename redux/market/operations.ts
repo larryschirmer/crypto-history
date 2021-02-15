@@ -15,10 +15,7 @@ export const fetchMarket = (ids: string[]) => async (dispatch: Dispatch): Promis
   const idsString = ids.join(',').toString();
   const currenciesString = new Array(ids.length).fill('usd').join(',').toString();
 
-  const res = await fetch(`${apiBaseUrl}/simple/price`, {
-    method: 'GET',
-    body: new URLSearchParams(`ids=${idsString}&vs_currencies=${currenciesString}`),
-  });
+  const res = await fetch(`${apiBaseUrl}/simple/price?ids=${idsString}&vs_currencies=${currenciesString}`);
 
   if (res.status === 200) {
     const data: RawMarket = await res.json();
