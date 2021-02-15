@@ -1,10 +1,13 @@
 import React, { FC } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
 
 import { RootState } from '@redux/index';
+import { operations } from '@redux/portfolio';
 
 import styles from './Settings.module.scss';
+
+const { removeToken } = operations;
 
 const {
   settings: settingsClass,
@@ -12,11 +15,12 @@ const {
   portfolio: portfolioClass,
   'portfolio-item': portfolioItemClass,
   'item-details': itemDetailsClass,
-  'item-controls': itemControlsClass
+  'item-controls': itemControlsClass,
 } = styles;
 
 const Settings: FC = () => {
   const router = useRouter();
+  const dispatch = useDispatch();
   const { portfolio } = useSelector(({ portfolio }: RootState) => ({
     portfolio: portfolio.data,
   }));
@@ -26,6 +30,10 @@ const Settings: FC = () => {
       pathname: '/settings/[id]',
       query: { id: name },
     });
+  };
+
+  const handleDeleteItem = (name: string) => {
+    dispatch(removeToken(name));
   };
 
   return (
@@ -43,7 +51,7 @@ const Settings: FC = () => {
             </div>
             <div className={itemControlsClass}>
               <button onClick={() => handleEditItem(name)}>Edit</button>
-              <button>Delete</button>
+              <button onClick={() => handleDeleteItem(name)}>Delete</button>
             </div>
           </div>
         ))}

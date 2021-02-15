@@ -3,7 +3,11 @@ import { Token, Portfolio } from './types';
 
 export type Action =
   | {
-      type: typeof types.SET_PORTFOLIO;
+      type: typeof types.DELETE_TOKEN;
+      payload: string;
+    }
+  | {
+      type: typeof types.SET_TOKEN;
       payload: Token;
     }
   | {
@@ -17,7 +21,13 @@ export const initializePortfolio = (data: Portfolio): Action => ({
   type: types.INITIALIZE_PORTFOLIO,
   payload: data,
 });
-export const setPortfolio = (data: Token): Action => ({
-  type: types.SET_PORTFOLIO,
+
+export const setToken = (data: Token): Action => ({
+  type: types.SET_TOKEN,
+  payload: data,
+});
+
+export const deleteToken = (data: string): Action => ({
+  type: types.DELETE_TOKEN,
   payload: data,
 });

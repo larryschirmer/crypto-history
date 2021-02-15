@@ -1,9 +1,9 @@
 import { Token, Portfolio } from './types';
 
-import { initializePortfolio, setPortfolio, Dispatch } from './actions';
+import { initializePortfolio, setToken, deleteToken, Dispatch } from './actions';
 
 export const updatePortfolio = (token: Token) => (dispatch: Dispatch): void => {
-  dispatch(setPortfolio(token));
+  dispatch(setToken(token));
 
   const portfolio: Portfolio = JSON.parse(window.localStorage.getItem('portfolio') ?? '[]');
 
@@ -13,6 +13,16 @@ export const updatePortfolio = (token: Token) => (dispatch: Dispatch): void => {
     : [...portfolio, token];
 
   window.localStorage.setItem('portfolio', JSON.stringify(updatedData));
+};
+
+export const removeToken = (tokenId: string) => (dispatch: Dispatch): void => {
+  const portfolio: Portfolio = JSON.parse(window.localStorage.getItem('portfolio') ?? '[]');
+
+  const isIncluded = portfolio.find(({ name }) => name === tokenId);
+  const updatedData = isIncluded ? portfolio.filter(({ name }) => name !== tokenId) : portfolio;
+
+  window.localStorage.setItem('portfolio', JSON.stringify(updatedData));
+  dispatch(deleteToken(tokenId));
 };
 
 export const fetchPortfolio = () => (dispatch: Dispatch): void => {
