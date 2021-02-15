@@ -1,7 +1,7 @@
 export type Token = {
   name: string;
-  amount: number;
-  value: number;
+  amount: string;
+  value: string;
 };
 
 export type Snapshot = {

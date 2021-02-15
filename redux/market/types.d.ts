@@ -5,5 +5,5 @@ export type RawMarket = {
 };
 
 export type Market = {
-  [key: string]: number;
+  [key: string]: string;
 };

@@ -28,7 +28,7 @@ export const generatePortfolio = ({ portfolio, market }: Props) => (dispatch: Di
 
   const midnight = new Date().setUTCHours(0, 0, 0, 0);
   const date = new Date(midnight).toISOString();
-  const isNewDay = !!prevHistory.find(({ day }) => day === date);
+  const isNewDay = !prevHistory.find(({ day }) => day === date);
 
   let history: History;
   if (isNewDay) {
