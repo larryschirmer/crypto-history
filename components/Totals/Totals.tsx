@@ -26,7 +26,7 @@ const Totals: FC = () => {
   }));
 
   const todaysSnapshot: Snapshot | undefined = history.length ? history.slice(-1)[0] : undefined;
-  const snapshotDate = new Date(todaysSnapshot.day);
+  const snapshotDate = !!todaysSnapshot?.day && new Date(todaysSnapshot.day);
   const total = todaysSnapshot?.portfolio.reduce(
     (sum, token) => sum + +token.amount * +token.value,
     0,
@@ -43,7 +43,7 @@ const Totals: FC = () => {
     <div className={totalsClass}>
       <div className={titleClass}>
         Snapshot for{' '}
-        {format(addMinutes(snapshotDate, snapshotDate.getTimezoneOffset()), 'eee, MMM do')}
+        {!!snapshotDate && format(addMinutes(snapshotDate, snapshotDate.getTimezoneOffset()), 'eee, MMM do')}
       </div>
       <div className={subtitleClass}>
         {new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(total)}
@@ -53,7 +53,7 @@ const Totals: FC = () => {
           <div key={name} className={tokenClass}>
             <div className={tokenDetailsClass}>
               <h1>{name}</h1>
-              <p>
+              <p>:{' '}
                 {new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(
                   +amount * +value,
                 )}

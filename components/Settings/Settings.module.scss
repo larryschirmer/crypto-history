@@ -5,6 +5,7 @@
   display: flex;
   flex-direction: column;
   .header {
+    border-bottom: 1px solid #333;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -13,6 +14,37 @@
     }
     button {
       @include button;
+    }
+  }
+  .portfolio {
+    display: flex;
+    flex-direction: column;
+    .portfolio-item {
+      margin: 1rem 0;
+      display: flex;
+      justify-content: space-between;
+      .item-details {
+        display: flex;
+        h1,
+        p {
+          font-size: 1.3rem;
+          margin: 0;
+          padding: 0;
+        }
+        h1 {
+          font-weight: bold;
+        }
+      }
+      .item-controls {
+        button {
+          @include button;
+          height: 2rem;
+          font-size: 1.3rem;
+          &:first-child {
+            margin-right: 1rem;
+          }
+        }
+      }
     }
   }
 }

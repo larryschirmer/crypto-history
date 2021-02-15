@@ -11,6 +11,8 @@ const {
   header: headerClass,
   portfolio: portfolioClass,
   'portfolio-item': portfolioItemClass,
+  'item-details': itemDetailsClass,
+  'item-controls': itemControlsClass
 } = styles;
 
 const Settings: FC = () => {
@@ -30,15 +32,19 @@ const Settings: FC = () => {
     <div className={settingsClass}>
       <div className={headerClass}>
         <h1>Portfolio</h1>
-        <button onClick={() => handleEditItem("new")}>Add</button>
+        <button onClick={() => handleEditItem('new')}>Add</button>
       </div>
       <div className={portfolioClass}>
         {portfolio.map(({ name, amount }) => (
           <div key={name} className={portfolioItemClass}>
-            <div>
-              {name}: {amount}
+            <div className={itemDetailsClass}>
+              <h1>{name}</h1>
+              <p>: {amount}</p>
             </div>
-            <button onClick={() => handleEditItem(name)}>Edit</button>
+            <div className={itemControlsClass}>
+              <button onClick={() => handleEditItem(name)}>Edit</button>
+              <button>Delete</button>
+            </div>
           </div>
         ))}
       </div>
