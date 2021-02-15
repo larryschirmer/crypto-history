@@ -2,6 +2,7 @@ import React, { FC } from 'react';
 import { useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
 import format from 'date-fns/format';
+import addMinutes from 'date-fns/addMinutes';
 
 import { RootState } from '@redux/index';
 import { Snapshot } from '@redux/history/types';
@@ -25,6 +26,7 @@ const Totals: FC = () => {
   }));
 
   const todaysSnapshot: Snapshot | undefined = history.length ? history.slice(-1)[0] : undefined;
+  const snapshotDate = new Date(todaysSnapshot.day);
   const total = todaysSnapshot?.portfolio.reduce(
     (sum, token) => sum + +token.amount * +token.value,
     0,
@@ -40,7 +42,8 @@ const Totals: FC = () => {
   return todaysSnapshot ? (
     <div className={totalsClass}>
       <div className={titleClass}>
-        Snapshot for {format(new Date(todaysSnapshot.day), 'eee, MMM do')}
+        Snapshot for{' '}
+        {format(addMinutes(snapshotDate, snapshotDate.getTimezoneOffset()), 'eee, MMM do')}
       </div>
       <div className={subtitleClass}>
         {new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(total)}
@@ -52,7 +55,7 @@ const Totals: FC = () => {
               <h1>{name}</h1>
               <p>
                 {new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(
-                  amount * value,
+                  +amount * +value,
                 )}
               </p>
             </div>
