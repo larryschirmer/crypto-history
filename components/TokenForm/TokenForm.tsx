@@ -61,7 +61,7 @@ const TokenForm: FC = () => {
             label="Name"
             name="name"
             placeholder="token name"
-            onChange={formik.handleChange}
+            onChange={(val: string) => formik.setFieldValue('name', val)}
             value={formik.values.name}
             touched={formik.touched.name}
             error={formik.errors.name}

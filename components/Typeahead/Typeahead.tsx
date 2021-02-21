@@ -1,22 +1,15 @@
-import React, { FC, ChangeEvent, useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, FC, ChangeEvent } from 'react';
 import { distance } from 'fastest-levenshtein';
 
 import styles from './Typeahead.module.scss';
 
 const { typeahead: typeaheadStyles, error: errorClass, dropdown: dropdownClass } = styles;
 
-type ConstructedEvent = {
-  target: {
-    name: string;
-    value: string;
-  };
-};
-
 type Props = {
   label: string;
   name: string;
   placeholder: string;
-  onChange: (e: ChangeEvent | ConstructedEvent) => void;
+  onChange: (val: string) => void;
   value: string;
   error: string;
   touched: boolean;
@@ -35,18 +28,28 @@ const Typeahead: FC<Props> = (props: Props) => {
     list = [],
   } = props;
 
+  const componentRef = useRef<HTMLDivElement>();
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [selectedValue, setSelectedValue] = useState<string>('');
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    onChange(e);
+  const handleChange = ({ target }: ChangeEvent<HTMLInputElement>) => {
+    const { value } = target;
+    onChange(value);
     setSelectedValue('');
   };
 
   const handleSelect = (selectedItem: string) => {
-    onChange({ target: { value: selectedItem, name } });
+    onChange(selectedItem);
     setSelectedValue(selectedItem);
   };
+
+  // setup input event listeners
+  useEffect(() => {
+    componentRef.current.onblur = () => {
+      setSuggestions([]);
+      setSelectedValue('');
+    };
+  }, []);
 
   // update suggestions based on value
   useEffect(() => {
@@ -72,7 +75,7 @@ const Typeahead: FC<Props> = (props: Props) => {
   }, [list, selectedValue, value]);
 
   return (
-    <div className={typeaheadStyles}>
+    <div ref={componentRef} className={typeaheadStyles}>
       <label htmlFor="name">{label}</label>
       <input {...{ name, placeholder, value }} type="text" onChange={handleChange} />
       {error && touched && <div className={errorClass}>{error}</div>}
