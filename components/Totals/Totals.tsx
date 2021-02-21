@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { useMemo, FC } from 'react';
 import { useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
 import format from 'date-fns/format';
@@ -6,6 +6,7 @@ import addMinutes from 'date-fns/addMinutes';
 
 import { RootState } from '@redux/index';
 import { Snapshot } from '@redux/history/types';
+import { Portfolio } from '@redux/portfolio/types';
 
 import styles from './Totals.module.scss';
 
@@ -32,6 +33,14 @@ const Totals: FC = () => {
     0,
   );
 
+  const portfolioList: Portfolio = useMemo(() => {
+    return todaysSnapshot.portfolio.slice(0).sort((a, b) => {
+      if (a.name < b.name) return -1;
+      if (a.name > b.name) return 1;
+      return 0;
+    });
+  }, [todaysSnapshot.portfolio]);
+
   const handleEditToken = (id: string) => {
     router.push({
       pathname: '/settings/[id]',
@@ -43,17 +52,19 @@ const Totals: FC = () => {
     <div className={totalsClass}>
       <div className={titleClass}>
         Snapshot for{' '}
-        {!!snapshotDate && format(addMinutes(snapshotDate, snapshotDate.getTimezoneOffset()), 'eee, MMM do')}
+        {!!snapshotDate &&
+          format(addMinutes(snapshotDate, snapshotDate.getTimezoneOffset()), 'eee, MMM do')}
       </div>
       <div className={subtitleClass}>
         {new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(total)}
       </div>
       <div className={tokenListClass}>
-        {todaysSnapshot.portfolio.map(({ amount, name, value }) => (
+        {portfolioList.map(({ amount, name, value }) => (
           <div key={name} className={tokenClass}>
             <div className={tokenDetailsClass}>
               <h1>{name}</h1>
-              <p>:{' '}
+              <p>
+                :{' '}
                 {new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(
                   +amount * +value,
                 )}
