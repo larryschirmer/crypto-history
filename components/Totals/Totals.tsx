@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from 'react';
+import React, { FC } from 'react';
 import { useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
 import format from 'date-fns/format';
@@ -78,7 +78,7 @@ const Totals: FC = () => {
   const renderOpenSettings = () => (
     <div className={openSettingsClass}>
       <p>Open Settings to add tokens to track</p>
-      <button>Settings</button>
+      <button onClick={() => router.push('/settings')}>Settings</button>
     </div>
   );
 
