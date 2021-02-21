@@ -41,11 +41,13 @@ const TokenForm: FC = () => {
     name: Yup.string()
       .test('is-valid-token-id', 'please enter valid token id', (val) => validIds.includes(val))
       .required(),
-    amount: Yup.string().required(),
+    amount: Yup.string()
+      .matches(/^[0-9]+$/, 'Please use only numbers')
+      .required(),
   });
   const onSubmit = (values: Token) => {
     dispatch(updatePortfolio(values));
-    handleOpenSettings()
+    handleOpenSettings();
   };
 
   const formik = useFormik({ initialValues, validationSchema, onSubmit });
@@ -73,6 +75,7 @@ const TokenForm: FC = () => {
             onChange={formik.handleChange}
             value={formik.values.amount}
           />
+          {formik.errors?.amount && <div className={errorClass}>{formik.errors.amount}</div>}
         </div>
         <div className={formActionsClass}>
           <button onClick={handleOpenSettings} className={cancelBtnClass}>
