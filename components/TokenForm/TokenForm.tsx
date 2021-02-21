@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
+import Typeahead from '@components/Typeahead';
 import { Token } from '@redux/portfolio/types';
 import { operations } from '@redux/portfolio';
 import { RootState } from '@redux/index';
@@ -56,15 +57,16 @@ const TokenForm: FC = () => {
     <div className={tokenFormClass}>
       <form onSubmit={formik.handleSubmit}>
         <div className={inputSectionClass}>
-          <label htmlFor="name">Name</label>
-          <input
-            type="text"
+          <Typeahead
+            label="Name"
             name="name"
-            placeholder="btc"
+            placeholder="token name"
             onChange={formik.handleChange}
             value={formik.values.name}
+            touched={formik.touched.name}
+            error={formik.errors.name}
+            list={validIds}
           />
-          {formik.errors?.name && <div className={errorClass}>{formik.errors.name}</div>}
         </div>
         <div className={inputSectionClass}>
           <label htmlFor="amount">Amount</label>
@@ -75,7 +77,9 @@ const TokenForm: FC = () => {
             onChange={formik.handleChange}
             value={formik.values.amount}
           />
-          {formik.errors?.amount && <div className={errorClass}>{formik.errors.amount}</div>}
+          {formik.errors.amount && formik.touched.amount && (
+            <div className={errorClass}>{formik.errors.amount}</div>
+          )}
         </div>
         <div className={formActionsClass}>
           <button onClick={handleOpenSettings} className={cancelBtnClass}>
