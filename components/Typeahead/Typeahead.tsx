@@ -43,6 +43,11 @@ const Typeahead: FC<Props> = (props: Props) => {
     setSelectedValue(selectedItem);
   };
 
+  // sync selected value on load in edit mode
+  useEffect(() => {
+    setSelectedValue(value);
+  }, [])
+
   // setup input event listeners
   useEffect(() => {
     componentRef.current.onblur = () => {
