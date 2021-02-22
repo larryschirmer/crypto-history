@@ -1,9 +1,10 @@
-import React, { FC } from 'react';
+import React, { useMemo, FC } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
 
 import { RootState } from '@redux/index';
 import { operations } from '@redux/portfolio';
+import { Portfolio } from '@redux/portfolio/types';
 
 import styles from './Settings.module.scss';
 
@@ -25,6 +26,14 @@ const Settings: FC = () => {
     portfolio: portfolio.data,
   }));
 
+  const portfolioList: Portfolio = useMemo(() => {
+    return portfolio.slice(0).sort((a, b) => {
+      if (a.name < b.name) return -1;
+      if (a.name > b.name) return 1;
+      return 0;
+    });
+  }, [portfolio]);
+
   const handleEditItem = (name: string) => {
     router.push({
       pathname: '/settings/[id]',
@@ -43,7 +52,7 @@ const Settings: FC = () => {
         <button onClick={() => handleEditItem('new')}>Add</button>
       </div>
       <div className={portfolioClass}>
-        {portfolio.map(({ name, amount }) => (
+        {portfolioList.map(({ name, amount }) => (
           <div key={name} className={portfolioItemClass}>
             <div className={itemDetailsClass}>
               <h1>{name}</h1>
