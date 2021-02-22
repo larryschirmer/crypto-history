@@ -13,13 +13,10 @@ const { generatePortfolio } = historyOperations;
 
 const useInitializeStore = (): void => {
   const dispatch = useDispatch();
-  const { portfolio, market, history } = useSelector(
-    ({ portfolio, market, history }: RootState) => ({
-      portfolio,
-      market,
-      history: history.data,
-    }),
-  );
+  const { portfolio, market } = useSelector(({ portfolio, market }: RootState) => ({
+    portfolio,
+    market,
+  }));
 
   const { data: portfolioData, initialized: portfolioDidInitialized } = portfolio;
   const { data: marketData, initialized: marketDidInitialized } = market;
@@ -36,16 +33,9 @@ const useInitializeStore = (): void => {
     if (shouldFetchData) {
       const tokenIds = portfolioData.map(({ name }) => name);
       dispatch(fetchMarket(tokenIds));
-    }
-  }, [dispatch, marketData, marketDidInitialized, portfolioData]);
-
-  // generate history if empty and others are set
-  useEffect(() => {
-    const shouldUpdate = isEmpty(history) && !isEmpty(marketData) && !isEmpty(portfolioData);
-    if (shouldUpdate) {
       dispatch(generatePortfolio({ portfolio: portfolioData, market: marketData }));
     }
-  }, [dispatch, history, marketData, portfolioData]);
+  }, [dispatch, marketData, marketDidInitialized, portfolioData]);
 };
 
 export default useInitializeStore;
