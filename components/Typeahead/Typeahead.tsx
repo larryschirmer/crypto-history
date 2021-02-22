@@ -34,7 +34,7 @@ const Typeahead: FC<Props> = (props: Props) => {
 
   const handleChange = ({ target }: ChangeEvent<HTMLInputElement>) => {
     const { value } = target;
-    onChange(value);
+    onChange(value.toLocaleLowerCase());
     setSelectedValue('');
   };
 
@@ -46,7 +46,7 @@ const Typeahead: FC<Props> = (props: Props) => {
   // sync selected value on load in edit mode
   useEffect(() => {
     setSelectedValue(value);
-  }, [])
+  }, []);
 
   // setup input event listeners
   useEffect(() => {
@@ -82,7 +82,12 @@ const Typeahead: FC<Props> = (props: Props) => {
   return (
     <div ref={componentRef} className={typeaheadStyles}>
       <label htmlFor="name">{label}</label>
-      <input {...{ name, placeholder, value }} type="text" onChange={handleChange} autoComplete="off" />
+      <input
+        {...{ name, placeholder, value }}
+        type="text"
+        onChange={handleChange}
+        autoComplete="off"
+      />
       {error && touched && <div className={errorClass}>{error}</div>}
       {!!suggestions.length && !selectedValue && (
         <div className={dropdownClass}>
