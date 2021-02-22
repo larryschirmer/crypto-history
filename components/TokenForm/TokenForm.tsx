@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
+import Typeahead from '@components/Typeahead';
 import { Token } from '@redux/portfolio/types';
 import { operations } from '@redux/portfolio';
 import { RootState } from '@redux/index';
@@ -41,11 +42,13 @@ const TokenForm: FC = () => {
     name: Yup.string()
       .test('is-valid-token-id', 'please enter valid token id', (val) => validIds.includes(val))
       .required(),
-    amount: Yup.string().required(),
+    amount: Yup.string()
+      .matches(/^[0-9]+$/, 'Please use only numbers')
+      .required(),
   });
   const onSubmit = (values: Token) => {
     dispatch(updatePortfolio(values));
-    handleOpenSettings()
+    handleOpenSettings();
   };
 
   const formik = useFormik({ initialValues, validationSchema, onSubmit });
@@ -54,15 +57,16 @@ const TokenForm: FC = () => {
     <div className={tokenFormClass}>
       <form onSubmit={formik.handleSubmit}>
         <div className={inputSectionClass}>
-          <label htmlFor="name">Name</label>
-          <input
-            type="text"
+          <Typeahead
+            label="Name"
             name="name"
-            placeholder="btc"
-            onChange={formik.handleChange}
+            placeholder="token name"
+            onChange={(val: string) => formik.setFieldValue('name', val)}
             value={formik.values.name}
+            touched={formik.touched.name}
+            error={formik.errors.name}
+            list={validIds}
           />
-          {formik.errors?.name && <div className={errorClass}>{formik.errors.name}</div>}
         </div>
         <div className={inputSectionClass}>
           <label htmlFor="amount">Amount</label>
@@ -73,6 +77,9 @@ const TokenForm: FC = () => {
             onChange={formik.handleChange}
             value={formik.values.amount}
           />
+          {formik.errors.amount && formik.touched.amount && (
+            <div className={errorClass}>{formik.errors.amount}</div>
+          )}
         </div>
         <div className={formActionsClass}>
           <button onClick={handleOpenSettings} className={cancelBtnClass}>

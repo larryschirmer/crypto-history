@@ -1,0 +1,54 @@
+@import '@styles/vars.module';
+
+.typeahead {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  label {
+    font-size: 1.7rem;
+    color: #333;
+  }
+  input {
+    height: 3rem;
+    border: 1px solid #333;
+    border-radius: 0.2rem;
+    padding: 0 1rem;
+    font-size: 2rem;
+    &::placeholder {
+      color: #aaa;
+    }
+  }
+  .error {
+    font-size: 1.2rem;
+    color: #e25e;
+  }
+  .dropdown {
+    position: absolute;
+    top: 6rem;
+    left: 0;
+    width: calc(100vw - 6rem);
+    max-width: 60rem;
+    max-height: 20rem;
+    overflow: scroll;
+    border-radius: 0.2rem;
+    background-color: white;
+    box-shadow: 0 0.28rem 0.22rem rgba(0, 0, 0, 0.034), 0 0.67rem 0.53rem rgba(0, 0, 0, 0.048),
+      0 1.25rem 1rem rgba(0, 0, 0, 0.06), 0 2.23rem 1.79rem rgba(0, 0, 0, 0.072),
+      0 4.18rem 3.34rem rgba(0, 0, 0, 0.086), 0 10rem 8rem rgba(0, 0, 0, 0.12);
+    ul {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      list-style-type: none;
+      li {
+        width: 100%;
+        box-sizing: border-box;
+        padding: 1rem;
+        cursor: pointer;
+        &:nth-child(odd) {
+          background-color: #ddd;
+        }
+      }
+    }
+  }
+}
