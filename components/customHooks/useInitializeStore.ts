@@ -33,9 +33,16 @@ const useInitializeStore = (): void => {
     if (shouldFetchData) {
       const tokenIds = portfolioData.map(({ name }) => name);
       dispatch(fetchMarket(tokenIds));
-      dispatch(generatePortfolio({ portfolio: portfolioData, market: marketData }));
     }
   }, [dispatch, marketData, marketDidInitialized, portfolioData]);
+
+  // generate history if others are set or update
+  useEffect(() => {
+    const shouldUpdate = !isEmpty(marketData) && !isEmpty(portfolioData);
+    if (shouldUpdate) {
+      dispatch(generatePortfolio({ portfolio: portfolioData, market: marketData }));
+    }
+  }, [dispatch, marketData, portfolioData]);
 };
 
 export default useInitializeStore;
