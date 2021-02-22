@@ -44,6 +44,7 @@
         width: 100%;
         box-sizing: border-box;
         padding: 1rem;
+        cursor: pointer;
         &:nth-child(odd) {
           background-color: #ddd;
         }
