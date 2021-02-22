@@ -6,7 +6,6 @@ import addMinutes from 'date-fns/addMinutes';
 
 import { RootState } from '@redux/index';
 import { Snapshot } from '@redux/history/types';
-import { Portfolio } from '@redux/portfolio/types';
 
 import styles from './Totals.module.scss';
 
@@ -33,13 +32,13 @@ const Totals: FC = () => {
     0,
   );
 
-  const portfolioList: Portfolio = useMemo(() => {
-    return todaysSnapshot.portfolio.slice(0).sort((a, b) => {
+  const portfolioList = useMemo(() => {
+    return todaysSnapshot?.portfolio.slice(0).sort((a, b) => {
       if (a.name < b.name) return -1;
       if (a.name > b.name) return 1;
       return 0;
     });
-  }, [todaysSnapshot.portfolio]);
+  }, [todaysSnapshot?.portfolio]);
 
   const handleEditToken = (id: string) => {
     router.push({
