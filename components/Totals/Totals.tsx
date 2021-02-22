@@ -82,7 +82,7 @@ const Totals: FC = () => {
               <p>
                 :{' '}
                 {new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(
-                  renderPreciseValue(amount, value),
+                  renderPreciseValue(+amount * +value),
                 )}
               </p>
             </div>
