@@ -82,7 +82,7 @@ const Typeahead: FC<Props> = (props: Props) => {
   return (
     <div ref={componentRef} className={typeaheadStyles}>
       <label htmlFor="name">{label}</label>
-      <input {...{ name, placeholder, value }} type="text" onChange={handleChange} />
+      <input {...{ name, placeholder, value }} type="text" onChange={handleChange} autoComplete="off" />
       {error && touched && <div className={errorClass}>{error}</div>}
       {!!suggestions.length && !selectedValue && (
         <div className={dropdownClass}>
