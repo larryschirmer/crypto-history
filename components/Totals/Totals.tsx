@@ -36,11 +36,13 @@ const Totals: FC = () => {
   );
 
   const portfolioList = useMemo(() => {
-    return todaysSnapshot?.portfolio.slice(0).sort((a, b) => {
-      if (a.name < b.name) return -1;
-      if (a.name > b.name) return 1;
-      return 0;
-    });
+    return (
+      todaysSnapshot?.portfolio.slice(0).sort((a, b) => {
+        if (a.name < b.name) return -1;
+        if (a.name > b.name) return 1;
+        return 0;
+      }) ?? []
+    );
   }, [todaysSnapshot?.portfolio]);
 
   const handleEditToken = (id: string) => {
