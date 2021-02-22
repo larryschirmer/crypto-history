@@ -36,11 +36,13 @@ const Totals: FC = () => {
   );
 
   const portfolioList = useMemo(() => {
-    return todaysSnapshot?.portfolio.slice(0).sort((a, b) => {
-      if (a.name < b.name) return -1;
-      if (a.name > b.name) return 1;
-      return 0;
-    });
+    return (
+      todaysSnapshot?.portfolio.slice(0).sort((a, b) => {
+        if (a.name < b.name) return -1;
+        if (a.name > b.name) return 1;
+        return 0;
+      }) ?? []
+    );
   }, [todaysSnapshot?.portfolio]);
 
   const handleEditToken = (id: string) => {
@@ -48,6 +50,16 @@ const Totals: FC = () => {
       pathname: '/settings/[id]',
       query: { id },
     });
+  };
+
+  const renderPreciseValue = (...vals: (number | string)[]) => {
+    const formattedVals = vals.map((val) => {
+      if (!val) return 0;
+      if (typeof val === 'string') return Number(val);
+      return val;
+    });
+    const total = formattedVals.reduce((sum, amt) => sum + amt, 0);
+    return +total.toPrecision(2);
   };
 
   const renderList = () => (
@@ -59,7 +71,7 @@ const Totals: FC = () => {
       </div>
       <div className={subtitleClass}>
         {new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(
-          +total.toPrecision(2),
+          renderPreciseValue(total),
         )}
       </div>
       <div className={tokenListClass}>
@@ -70,7 +82,7 @@ const Totals: FC = () => {
               <p>
                 :{' '}
                 {new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(
-                  +(+amount * +value).toPrecision(2),
+                  renderPreciseValue(amount, value),
                 )}
               </p>
             </div>
