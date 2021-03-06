@@ -10,14 +10,14 @@ import styles from './Chart.module.scss';
 const { chart: chartClass } = styles;
 
 const dimensions = {
-  width: 600,
-  height: 500,
+  width: 350,
+  height: 400,
   focus: {
-    width: 600,
-    height: 375,
+    width: 350,
+    height: 275,
   },
   context: {
-    width: 570,
+    width: 310,
     height: 125,
   },
 };
@@ -35,8 +35,8 @@ const margin = {
     right: 10,
     bottom: 40,
     left: 0,
-    offsetX: 30,
-    offsetY: 375,
+    offsetX: 40,
+    offsetY: 275,
   },
 };
 

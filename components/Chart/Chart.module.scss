@@ -1,7 +1,15 @@
 @import '@styles/vars.module';
 
 .chart {
-  
+  :global(.line) {
+    fill: none;
+    stroke: steelblue;
+    stroke-width: 2px;
+    stroke-linecap: round;
+  }
+  :global(.area) {
+    fill: steelblue;
+  }
 }
 
 // .chart-placeholder {

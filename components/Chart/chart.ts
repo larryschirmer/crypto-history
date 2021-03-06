@@ -2,6 +2,7 @@ import { select } from 'd3-selection';
 import { scaleTime, scaleLinear } from 'd3-scale';
 import { extent } from 'd3-array';
 import { axisLeft, axisBottom } from 'd3-axis';
+import { line, area, curveMonotoneX } from 'd3-shape';
 
 import { History } from '@redux/history/types';
 
@@ -96,9 +97,28 @@ export const updateChart = (props: Chart): void => {
     .domain(extent(chartData.map(({ total }) => total)))
     .range([size.context.height, 0]);
 
+  const focusLine = line<typeof chartData[number]>()
+    .x(({ day }) => scaleFocusX(day))
+    .y(({ total }) => scaleFocusY(total))
+    .curve(curveMonotoneX);
+  const contextArea = area<typeof chartData[number]>()
+    .x(({ day }) => scaleContextX(day))
+    .y0(size.context.height)
+    .y1(({ total }) => scaleContextY(total))
+    .curve(curveMonotoneX);
+
   const xAxisFocus = axisBottom(scaleFocusX);
   const yAxisFocus = axisLeft(scaleFocusY);
   const xAxisContext = axisBottom(scaleContextX);
+
+  const renderedChartFocus = focus.selectAll('.line').data([chartData]);
+  renderedChartFocus.exit().remove();
+  renderedChartFocus.enter().append('path').attr('class', 'line');
+  renderedChartFocus.attr('d', focusLine);
+  const renderedChartContext = context.selectAll('.area').data([chartData]);
+  renderedChartContext.exit().remove();
+  renderedChartContext.enter().append('path').attr('class', 'area');
+  renderedChartContext.attr('d', contextArea);
 
   focusAxixX.call(xAxisFocus);
   focusAxisY.call(yAxisFocus);
