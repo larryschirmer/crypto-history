@@ -4,7 +4,7 @@ import { extent } from 'd3-array';
 import { axisLeft, axisBottom } from 'd3-axis';
 import { line, area, curveMonotoneX } from 'd3-shape';
 import { brushX } from 'd3-brush';
-import { utcDay } from 'd3-time';
+import sub from 'date-fns/sub';
 
 import { History } from '@redux/history/types';
 
@@ -95,8 +95,9 @@ export const updateChart = (props: Chart): void => {
 
   const [minDate, maxDate] = extent(chartData.map(({ day }) => day));
   const [minTotal, maxTotal] = extent(chartData.map(({ total }) => total));
+  const defaultDomainRange = [sub(maxDate, { weeks: 1 }), maxDate];
 
-  const scaleFocusX = scaleTime().domain([minDate, maxDate]).range([0, size.focus.width]);
+  const scaleFocusX = scaleTime().domain(defaultDomainRange).range([0, size.focus.width]);
   const scaleFocusY = scaleLinear()
     .domain([rooted ? 0 : minTotal, maxTotal])
     .range([size.focus.height, 0]);
@@ -113,14 +114,15 @@ export const updateChart = (props: Chart): void => {
     .y1(({ total }) => scaleContextY(total))
     .curve(curveMonotoneX);
 
+  const defaultBrushSelection = defaultDomainRange.map(scaleContextX);
   const contextBrushArea = brushX<Datum>().extent([
     [margin.context.left, 0.5],
     [dimensions.context.width - margin.context.right, size.context.height + 0.5],
   ]);
 
-  const xAxisFocus = axisBottom(scaleFocusX);
+  const xAxisFocus = axisBottom(scaleFocusX).ticks(5);
   const yAxisFocus = axisLeft(scaleFocusY);
-  const xAxisContext = axisBottom(scaleContextX);
+  const xAxisContext = axisBottom(scaleContextX).ticks(5);
 
   const renderedChartFocus = focusChart.data([chartData]);
   renderedChartFocus.exit().remove();
@@ -131,16 +133,13 @@ export const updateChart = (props: Chart): void => {
   renderedChartContext.enter().append('path').attr('class', 'area');
   renderedChartContext.attr('d', contextArea);
 
-  contextBrush.call(contextBrushArea);
+  contextBrush.call(contextBrushArea).call(contextBrushArea.move, defaultBrushSelection);
 
   const brushed = ({ selection }: { selection: [number, number] }) => {
     if (selection) {
-      scaleFocusX.domain(selection.map(scaleFocusX.invert).map(utcDay.round));
-      renderedChartFocus.attr(
-        'd',
-        focusLine.x(({ day }) => scaleFocusX(day)),
-      );
-      focusAxixX.call(xAxisFocus);
+      scaleFocusX.domain(selection.map(scaleContextX.invert));
+      renderedChartFocus.attr('d', focusLine);
+      focusAxixX.call(axisBottom(scaleFocusX).ticks(5));
     }
   };
   contextBrushArea.on('brush', brushed);
