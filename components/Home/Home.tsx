@@ -1,20 +1,16 @@
 import React, { FC } from 'react';
 
 import Totals from '@components/Totals';
+import Chart from '@components/Chart';
 
 import styles from './Home.module.scss';
 
-const {
-  home: homeClass,
-  'chart-placeholder': chartPlaceholderClass,
-  'brush-placeholder': brushPlaceholderClass,
-} = styles;
+const { home: homeClass } = styles;
 
 const Home: FC = () => {
   return (
     <div className={homeClass}>
-      <div className={chartPlaceholderClass}></div>
-      <div className={brushPlaceholderClass}></div>
+      <Chart />
       <Totals />
     </div>
   );
