@@ -3,6 +3,8 @@ import { scaleTime, scaleLinear } from 'd3-scale';
 import { extent } from 'd3-array';
 import { axisLeft, axisBottom } from 'd3-axis';
 import { line, area, curveMonotoneX } from 'd3-shape';
+import { brushX } from 'd3-brush';
+import { utcDay } from 'd3-time';
 
 import { History } from '@redux/history/types';
 
@@ -13,6 +15,7 @@ type Chart = {
   margin: Margin;
   chart: SVGSVGElement;
   data?: History;
+  rooted?: boolean;
 };
 export const setupChart = (props: Chart): void => {
   const { dimensions, margin, chart } = props;
@@ -57,21 +60,27 @@ export const setupChart = (props: Chart): void => {
     .append('g')
     .attr('class', 'context-axis-x')
     .attr('transform', `translate(0, ${size.context.height})`);
+
+  focus.append('path').attr('class', 'line');
+  context.append('path').attr('class', 'area');
+  context.append('g').attr('class', 'context-brush');
 };
 
 export const updateChart = (props: Chart): void => {
-  const { dimensions, margin, chart, data } = props;
+  const { dimensions, margin, chart, data, rooted = false } = props;
   const chartData = data.map(({ day, portfolio }) => ({
     day: new Date(day),
     total: portfolio.reduce((sum, { amount, value }) => sum + Number(amount) * Number(value), 0),
   }));
+  type Datum = typeof chartData[number];
 
   const svg = select(chart);
-  const focus = svg.selectAll('.focus');
+  const focusChart = svg.selectAll('.line');
   const focusAxixX = svg.selectAll('.focus-axis-x');
   const focusAxisY = svg.selectAll('.focus-axis-y');
-  const context = svg.selectAll('.context');
+  const contextChart = svg.selectAll('.area');
   const contextAxisX = svg.selectAll('.context-axis-x');
+  const contextBrush = svg.selectAll('.context-brush');
 
   const size = {
     focus: {
@@ -84,41 +93,57 @@ export const updateChart = (props: Chart): void => {
     },
   };
 
-  const scaleFocusX = scaleTime()
-    .domain(extent(chartData.map(({ day }) => day)))
-    .range([0, size.focus.width]);
-  const scaleFocusY = scaleLinear()
-    .domain(extent(chartData.map(({ total }) => total)))
-    .range([size.focus.height, 0]);
-  const scaleContextX = scaleTime()
-    .domain(extent(chartData.map(({ day }) => day)))
-    .range([0, size.context.width]);
-  const scaleContextY = scaleLinear()
-    .domain(extent(chartData.map(({ total }) => total)))
-    .range([size.context.height, 0]);
+  const [minDate, maxDate] = extent(chartData.map(({ day }) => day));
+  const [minTotal, maxTotal] = extent(chartData.map(({ total }) => total));
 
-  const focusLine = line<typeof chartData[number]>()
+  const scaleFocusX = scaleTime().domain([minDate, maxDate]).range([0, size.focus.width]);
+  const scaleFocusY = scaleLinear()
+    .domain([rooted ? 0 : minTotal, maxTotal])
+    .range([size.focus.height, 0]);
+  const scaleContextX = scaleTime().domain([minDate, maxDate]).range([0, size.context.width]);
+  const scaleContextY = scaleLinear().domain([minTotal, maxTotal]).range([size.context.height, 0]);
+
+  const focusLine = line<Datum>()
     .x(({ day }) => scaleFocusX(day))
     .y(({ total }) => scaleFocusY(total))
     .curve(curveMonotoneX);
-  const contextArea = area<typeof chartData[number]>()
+  const contextArea = area<Datum>()
     .x(({ day }) => scaleContextX(day))
     .y0(size.context.height)
     .y1(({ total }) => scaleContextY(total))
     .curve(curveMonotoneX);
 
+  const contextBrushArea = brushX<Datum>().extent([
+    [margin.context.left, 0.5],
+    [dimensions.context.width - margin.context.right, size.context.height + 0.5],
+  ]);
+
   const xAxisFocus = axisBottom(scaleFocusX);
   const yAxisFocus = axisLeft(scaleFocusY);
   const xAxisContext = axisBottom(scaleContextX);
 
-  const renderedChartFocus = focus.selectAll('.line').data([chartData]);
+  const renderedChartFocus = focusChart.data([chartData]);
   renderedChartFocus.exit().remove();
   renderedChartFocus.enter().append('path').attr('class', 'line');
   renderedChartFocus.attr('d', focusLine);
-  const renderedChartContext = context.selectAll('.area').data([chartData]);
+  const renderedChartContext = contextChart.data([chartData]);
   renderedChartContext.exit().remove();
   renderedChartContext.enter().append('path').attr('class', 'area');
   renderedChartContext.attr('d', contextArea);
+
+  contextBrush.call(contextBrushArea);
+
+  const brushed = ({ selection }: { selection: [number, number] }) => {
+    if (selection) {
+      scaleFocusX.domain(selection.map(scaleFocusX.invert).map(utcDay.round));
+      renderedChartFocus.attr(
+        'd',
+        focusLine.x(({ day }) => scaleFocusX(day)),
+      );
+      focusAxixX.call(xAxisFocus);
+    }
+  };
+  contextBrushArea.on('brush', brushed);
 
   focusAxixX.call(xAxisFocus);
   focusAxisY.call(yAxisFocus);

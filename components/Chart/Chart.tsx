@@ -55,7 +55,7 @@ const Chart: FC = () => {
   // update chart data
   useEffect(() => {
     const chart = chartRef.current;
-    updateChart({ dimensions, margin, chart, data });
+    updateChart({ dimensions, margin, chart, data, rooted: true });
   }, [data]);
 
   return (
