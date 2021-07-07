@@ -7,6 +7,7 @@ import { useInitializeStore } from '@components/customHooks';
 const Page: FC = () => {
   // fetch portfolio, market, or history if empty
   useInitializeStore();
+  console.log(process.env.NEXT_PUBLIC_VERCEL_ENV)
 
   return (
     <>
