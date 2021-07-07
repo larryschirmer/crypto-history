@@ -43,7 +43,7 @@ const TokenForm: FC = () => {
       .test('is-valid-token-id', 'please enter valid token id', (val) => validIds.includes(val))
       .required(),
     amount: Yup.string()
-      .matches(/^[0-9]+$/, 'Please use only numbers')
+      .matches(/^\d*\.?\d*$/, 'Please use only numbers')
       .required(),
   });
   const onSubmit = (values: Token) => {
